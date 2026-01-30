@@ -16,7 +16,7 @@ export default function Home() {
   };
 
   return (
-    <div className="@container flex flex-col items-center min-h-screen py-8 px-4 bg-green-100">
+    <div className="@container flex flex-col items-center min-h-screen py-8 px-4">
       <div className="justify-center max-w-xl mx-auto text-center">
         <h1 className="font-semibold text-5xl text-neutral-800 mb-4">
           MeAjudAI
@@ -25,8 +25,9 @@ export default function Home() {
           Esse sistema é responsável por realizar análises de gastos bancários,
           criando um relatório com base em arquivos enviados.
           <br />
-          Envie o arquivo do extrato de seu banco <span className="text-red-600">(PDF ou CSV)</span> abaixo e espere o sistema
-          gerar seu relatório.
+          Envie o arquivo do extrato de seu banco{" "}
+          <span className="text-red-600">(PDF ou CSV)</span> abaixo e espere o
+          sistema gerar seu relatório.
         </p>
         <p className="text-sm text-muted-foreground mb-3">
           De preferencia utilize arquivo CSV
