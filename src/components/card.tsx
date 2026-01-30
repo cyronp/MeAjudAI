@@ -15,7 +15,7 @@ export default function DashCard() {
           <p className="text-sm text-gray-500">Categoria de despesas</p>
         </div>
         <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-full p-3 shadow-md flex items-center justify-center">
-          <ShoppingCart className="text-white" size={20} strokeWidth={2.5} />
+          <ShoppingCart className="text-white" size={28} strokeWidth={2.5} />
         </div>
       </div>
 
@@ -34,7 +34,7 @@ export default function DashCard() {
         className="w-full border-t border-gray-100 pt-4"
       >
         <AccordionItem value="transactions" className="border-none">
-          <AccordionTrigger className="text-sm font-semibold text-gray-700 hover:text-gray-900 py-2">
+          <AccordionTrigger className="text-sm font-semibold text-gray-700 hover:text-gray-900 py-2 cursor-pointer">
             Visualizar transações
           </AccordionTrigger>
           <AccordionContent>
