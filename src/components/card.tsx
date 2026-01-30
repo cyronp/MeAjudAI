@@ -9,20 +9,23 @@ import {
 export default function DashCard() {
   return (
     <div className="w-96 bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300">
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex justify-between items-start mb-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 mb-1">Mercado</h1>
-          <p className="text-sm text-gray-500">Categoria de despesas</p>
+          <h2 className="text-sm font-medium text-gray-600">
+            Qtd. de transações
+          </h2>
+          <div className="flex items-baseline gap-2">
+            <p className="text-base font-bold text-gray-900">12</p>
+          </div>
         </div>
         <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-full p-3 shadow-md flex items-center justify-center">
-          <ShoppingCart className="text-white" size={28} strokeWidth={2.5} />
+          <ShoppingCart className="text-white" size={28} strokeWidth={2} />
         </div>
       </div>
 
-      <div className="mb-6">
-        <h2 className="text-sm font-medium text-gray-600 mb-2">
-          Total das transações
-        </h2>
+      <div className="mb-4">
+        <h2 className="text-sm font-medium text-gray-600 mb-2">Valor total</h2>
         <div className="flex items-baseline gap-2">
           <p className="text-4xl font-bold text-gray-900">R$ 900,00</p>
         </div>
