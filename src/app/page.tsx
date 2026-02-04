@@ -149,7 +149,7 @@ export default function Home() {
         <button
           onClick={handleUpload}
           disabled={!selectedFile || isLoading}
-          className="w-full max-w-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
+          className="w-full max-w-xl bg-emerald-600 text-white font-semibold py-4 px-6 rounded-xl transition-transform duration-300 hover:scale-105 disabled:bg-neutral-900 disabled:opacity-25 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg cursor-pointer"
         >
           {isLoading ? (
             <>
@@ -158,7 +158,6 @@ export default function Home() {
             </>
           ) : (
             <>
-              <ChartNoAxesCombined className="w-5 h-5" />
               Gerar Relatório Financeiro
             </>
           )}
