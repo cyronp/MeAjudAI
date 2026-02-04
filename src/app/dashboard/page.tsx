@@ -14,432 +14,28 @@ import {
   TrendingUp,
   Lightbulb,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-const reportData = {
-  month: "Janeiro",
-  year: "2026",
+type ReportData = {
+  month: string;
+  year: string;
   report: {
-    "Casa & Contas fixas": {
-      total: "+0.00",
-      transactions: [],
-    },
-    Mercado: {
-      total: "-943.74",
-      transactions: [
-        {
-          date: "08/01/2026",
-          transaction: "KunzSupermercados",
-          value: "-101.45",
-          payment_method: "Débito",
-        },
-        {
-          date: "08/01/2026",
-          transaction: "MERCADO BRASILIA",
-          value: "-88.75",
-          payment_method: "Débito",
-        },
-        {
-          date: "10/01/2026",
-          transaction: "Marcia Stela Suchek Schwarz",
-          value: "-75.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "12/01/2026",
-          transaction: "SUPERMERCADO ECONOMIA",
-          value: "-111.68",
-          payment_method: "Débito",
-        },
-        {
-          date: "13/01/2026",
-          transaction: "E.M.M. COMERCIO DE ALI",
-          value: "-147.13",
-          payment_method: "Débito",
-        },
-        {
-          date: "13/01/2026",
-          transaction: "E.M.M. COMERCIO DE ALI",
-          value: "-20.23",
-          payment_method: "Débito",
-        },
-        {
-          date: "14/01/2026",
-          transaction: "E.M.M. COMERCIO DE ALI",
-          value: "-10.99",
-          payment_method: "Débito",
-        },
-        {
-          date: "20/01/2026",
-          transaction: "SUPERMERCADO ECONOMIA",
-          value: "-12.98",
-          payment_method: "Débito",
-        },
-        {
-          date: "26/01/2026",
-          transaction: "E.M.M. COMERCIO DE ALI",
-          value: "-104.82",
-          payment_method: "Débito",
-        },
-        {
-          date: "28/01/2026",
-          transaction: "Acougue e Mercearia Padilha Ltda",
-          value: "-109.32",
-          payment_method: "Pix",
-        },
-        {
-          date: "29/01/2026",
-          transaction: "ATACAREJO COOPER",
-          value: "-161.39",
-          payment_method: "Débito",
-        },
-      ],
-    },
-    Alimentação: {
-      total: "-271.51",
-      transactions: [
-        {
-          date: "07/01/2026",
-          transaction: "PANIFICADORA PRINCESA LTDA",
-          value: "-30.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "08/01/2026",
-          transaction: "CONFEITARIA SEMENTE DA",
-          value: "-59.22",
-          payment_method: "Débito",
-        },
-        {
-          date: "12/01/2026",
-          transaction: "ARMAZEM DO PAO LTDA",
-          value: "-39.47",
-          payment_method: "Débito",
-        },
-        {
-          date: "15/01/2026",
-          transaction: "Panificadora",
-          value: "-59.28",
-          payment_method: "Débito",
-        },
-        {
-          date: "16/01/2026",
-          transaction: "Panificadora",
-          value: "-20.90",
-          payment_method: "Débito",
-        },
-        {
-          date: "26/01/2026",
-          transaction: "sorvetegaroto",
-          value: "-10.50",
-          payment_method: "Débito",
-        },
-        {
-          date: "26/01/2026",
-          transaction: "Panificadora",
-          value: "-52.14",
-          payment_method: "Débito",
-        },
-      ],
-    },
-    Transporte: {
-      total: "-14.75",
-      transactions: [
-        {
-          date: "26/01/2026",
-          transaction: "POSTO GUAIRA LTDA",
-          value: "-14.75",
-          payment_method: "Débito",
-        },
-      ],
-    },
-    Saúde: {
-      total: "-16.90",
-      transactions: [
-        {
-          date: "15/01/2026",
-          transaction: "FARMACIA PRECO POPULAR",
-          value: "-16.90",
-          payment_method: "Débito",
-        },
-      ],
-    },
-    Compras: {
-      total: "-298.44",
-      transactions: [
-        {
-          date: "10/01/2026",
-          transaction: "HNA*OBOTICARIO",
-          value: "-63.00",
-          payment_method: "Débito",
-        },
-        {
-          date: "25/01/2026",
-          transaction: "SHPP BRASIL INSTITUICAO DE PAG",
-          value: "-146.89",
-          payment_method: "Pix",
-        },
-        {
-          date: "27/01/2026",
-          transaction: "SHPP BRASIL INSTITUICAO DE PAG",
-          value: "-88.55",
-          payment_method: "Pix",
-        },
-      ],
-    },
-    "Lazer & Entretenimento": {
-      total: "+0.00",
-      transactions: [],
-    },
-    Educação: {
-      total: "+0.00",
-      transactions: [],
-    },
-    Outros: {
-      total: "+4764.78",
-      transactions: [
-        {
-          date: "02/01/2026",
-          transaction: "Alcelir Teixeira Alano Constantino",
-          value: "-60.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "03/01/2026",
-          transaction: "Vitor Henrique da Silveira Alano",
-          value: "-60.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "07/01/2026",
-          transaction: "EDUARDO DIAS DE OLIVEIRA",
-          value: "+3500.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "07/01/2026",
-          transaction: "Turia Cristina da Silveira Morais Barbosa",
-          value: "-870.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "07/01/2026",
-          transaction: "Luana Baia 09022855996",
-          value: "-100.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "08/01/2026",
-          transaction: "Vitor Henrique da Silveira Alano",
-          value: "-31.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "08/01/2026",
-          transaction: "Du Tintas Automotivas Ltda",
-          value: "+1351.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "09/01/2026",
-          transaction: "Viviane da Silva Bueno",
-          value: "-85.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "09/01/2026",
-          transaction: "Talita Aparecida Pilarski",
-          value: "-270.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "09/01/2026",
-          transaction:
-            "ASSOCIACAO FRADA FRENTE DE ACAO PELOS DIREITOS DOS ANIMAIS",
-          value: "-10.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "10/01/2026",
-          transaction: "46.274.214 ANDRE KALEBE CARTAPASSO",
-          value: "-86.90",
-          payment_method: "Pix",
-        },
-        {
-          date: "11/01/2026",
-          transaction: "FERNANDA LESCOWICZ",
-          value: "+65.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "11/01/2026",
-          transaction: "Clarisse da Silva Teixeira",
-          value: "+17.90",
-          payment_method: "Pix",
-        },
-        {
-          date: "12/01/2026",
-          transaction: "Luiz Cesar Girolla",
-          value: "-100.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "13/01/2026",
-          transaction: "MP *DUTINTASAUTOM",
-          value: "-1.00",
-          payment_method: "Débito",
-        },
-        {
-          date: "13/01/2026",
-          transaction: "EDUARDO DIAS DE OLIVEIRA",
-          value: "+500.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "14/01/2026",
-          transaction: "BICHOS DO BAIRRO",
-          value: "-12.00",
-          payment_method: "Débito",
-        },
-        {
-          date: "15/01/2026",
-          transaction: "Ana Carolina Dal Bello",
-          value: "-180.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "16/01/2026",
-          transaction: "SCHIRLEY MATOS PEREIRA",
-          value: "-10.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "16/01/2026",
-          transaction: "Viviane da Silva Bueno",
-          value: "-85.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "16/01/2026",
-          transaction: "KUNKUNKA LL",
-          value: "-11.49",
-          payment_method: "Débito",
-        },
-        {
-          date: "17/01/2026",
-          transaction: "ACAPEL COMERCIO DE PAP",
-          value: "-10.85",
-          payment_method: "Débito",
-        },
-        {
-          date: "17/01/2026",
-          transaction: "FERNANDA LESCOWICZ",
-          value: "-24.65",
-          payment_method: "Pix",
-        },
-        {
-          date: "19/01/2026",
-          transaction: "Talita Aparecida Pilarski",
-          value: "-9.50",
-          payment_method: "Pix",
-        },
-        {
-          date: "20/01/2026",
-          transaction: "Nelci Tavares de Oliveira",
-          value: "-10.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "20/01/2026",
-          transaction: "Luana Baia 09022855996",
-          value: "-88.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "20/01/2026",
-          transaction: "SCHIRLEY MATOS PEREIRA",
-          value: "-12.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "25/01/2026",
-          transaction: "EDUARDO DIAS DE OLIVEIRA",
-          value: "+600.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "25/01/2026",
-          transaction: "Jucelia Aparecida da Silveira",
-          value: "-270.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "25/01/2026",
-          transaction: "Vitor Henrique da Silveira Alano",
-          value: "-60.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "25/01/2026",
-          transaction: "Jucelia Aparecida da Silveira",
-          value: "+100.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "27/01/2026",
-          transaction: "Du Tintas Automotivas Ltda",
-          value: "+1000.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "28/01/2026",
-          transaction: "63 144 021 MARCELO BRAGA DOS SANTOS",
-          value: "+255.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "28/01/2026",
-          transaction: "JOSILAINE ALANO CONSTANTINO",
-          value: "+100.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "28/01/2026",
-          transaction: "BICHOS DO BAIRRO",
-          value: "-13.00",
-          payment_method: "Débito",
-        },
-        {
-          date: "29/01/2026",
-          transaction: "Vitor Henrique da Silveira Alano",
-          value: "-15.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "29/01/2026",
-          transaction: "Jucelia Aparecida da Silveira",
-          value: "-100.00",
-          payment_method: "Pix",
-        },
-        {
-          date: "29/01/2026",
-          transaction: "MELLO MANIA",
-          value: "-138.73",
-          payment_method: "Débito",
-        },
-      ],
-    },
-    Financeiro: {
-      total: "+0.00",
-      transactions: [],
-    },
-  },
-  total_expenses: "-4269.46",
-  total_income: "+7488.90",
-  how_good_status: "ÓTIMO",
-  how_good_description:
-    "O comportamento financeiro apresenta um saldo mensal positivo, impulsionado por entradas significativas via Pix. No entanto, há um volume considerável de gastos em categorias de consumo imediato (Alimentação e Mercado) e transferências pulverizadas em 'Outros'. Não foram registradas aplicações financeiras estruturadas, embora o saldo remanescente seja positivo.",
-  hints:
-    "1. Considere direcionar o saldo excedente para uma reserva de emergência ou investimentos (RDB/Tesouro). 2. Monitore a recorrência de gastos em padarias e cafeterias para otimizar o orçamento de alimentação. 3. Identifique melhor as transferências para pessoas físicas para garantir que não são gastos supérfluos ocultos.",
+    [key: string]: {
+      total: string;
+      transactions: {
+        date: string;
+        transaction: string;
+        value: string;
+        payment_method: string;
+      }[];
+    };
+  };
+  total_expenses: string;
+  total_income: string;
+  how_good_status: string;
+  how_good_description: string;
+  hints: string;
 };
 
 const categoryConfig = {
@@ -456,16 +52,50 @@ const categoryConfig = {
 };
 
 export default function Dashboard() {
+  const [reportData, setReportData] = useState<ReportData | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Carregar dados do localStorage
+    const storedData = localStorage.getItem("reportData");
+
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        setReportData(parsedData);
+      } catch (error) {
+        console.error("Erro ao carregar dados:", error);
+        router.push("/");
+      }
+    } else {
+      // Se não houver dados, redirecionar para a página inicial
+      router.push("/");
+    }
+  }, [router]);
+
+  if (!reportData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Carregando relatório...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 md:p-4">
       <div className="w-full max-w-7xl bg-white rounded-2xl shadow-2xl p-4 md:p-6 my-4 border border-gray-200">
-        <div className="mb-4">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Relatório financeiro
-          </h1>
-          <p className="text-gray-600">
-            {reportData.month} de {reportData.year}
-          </p>
+        <div className="mb-4 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Relatório financeiro
+            </h1>
+            <p className="text-gray-600">
+              {reportData.month} de {reportData.year}
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -523,7 +153,9 @@ export default function Dashboard() {
                 <div className="bg-amber-700/50 rounded-full w-12 h-12 items-center justify-center flex">
                   <Lightbulb className="text-yellow-200" />
                 </div>
-                <h1 className="text-2xl font-semibold text-gray-900">Dicas financeiras</h1>
+                <h1 className="text-2xl font-semibold text-gray-900">
+                  Dicas financeiras
+                </h1>
               </div>
               <p className="text-gray-600">{reportData.hints}</p>
             </div>

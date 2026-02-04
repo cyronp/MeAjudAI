@@ -5,7 +5,7 @@ import { join } from "path";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API || "");
 const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-flash-lite",
+  model: "gemini-2.5-flash",
 });
 
 const FINANCIAL_ANALYSIS_PROMPT = readFileSync(

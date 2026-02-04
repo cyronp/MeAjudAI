@@ -5,13 +5,58 @@ import {
   Lightbulb,
   Binoculars,
   Upload,
+  Loader2,
 } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setSelectedFile(file);
+      setError(null);
       console.log("Arquivo selecionado:", file.name);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      setError("Por favor, selecione um arquivo");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const response = await fetch("/api/request", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Erro ao processar arquivo");
+      }
+
+      const data = await response.json();
+
+      localStorage.setItem("reportData", JSON.stringify(data));
+
+      router.push("/dashboard");
+    } catch (err: any) {
+      setError(err.message || "Erro ao processar o arquivo");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -51,25 +96,73 @@ export default function Home() {
           <h1 className="text-xs sm:text-sm md:text-base font-medium">Dicas</h1>
         </div>
       </div>
-      <div className="flex flex-col w-full items-center justify-center mt-6">
+      <div className="flex flex-col w-full items-center justify-center mt-6 gap-4">
         <div className="w-full max-w-xl h-80 sm:h-96 bg-white rounded-2xl flex items-center justify-center p-3 sm:p-6 mx-auto">
           <label
             htmlFor="file-upload"
-            className="w-full h-full bg-transparent border-2 border-dashed border-green-500 rounded-2xl cursor-pointer flex flex-col items-center justify-center gap-2 sm:gap-3 group hover:bg-green-100/50 transition-all duration-300 ease-in-out px-4"
+            className={`w-full h-full bg-transparent border-2 border-dashed rounded-2xl cursor-pointer flex flex-col items-center justify-center gap-2 sm:gap-3 group transition-all duration-300 ease-in-out px-4 ${
+              selectedFile
+                ? "border-green-500 bg-green-50"
+                : "border-green-500 hover:bg-green-100/50"
+            }`}
           >
-            <Upload className="text-gray-800 group-hover:text-green-400 h-8 w-8 sm:h-10 sm:w-10" />
-            <h1 className="text-gray-800 group-hover:text-green-400 text-sm sm:text-base text-center">
-              Clique para adicionar seu arquivo
+            <Upload
+              className={`h-8 w-8 sm:h-10 sm:w-10 ${
+                selectedFile
+                  ? "text-green-600"
+                  : "text-gray-800 group-hover:text-green-400"
+              }`}
+            />
+            <h1
+              className={`text-sm sm:text-base text-center ${
+                selectedFile
+                  ? "text-green-700 font-medium"
+                  : "text-gray-800 group-hover:text-green-400"
+              }`}
+            >
+              {selectedFile
+                ? selectedFile.name
+                : "Clique para adicionar seu arquivo"}
             </h1>
+            {selectedFile && (
+              <p className="text-xs text-green-600">
+                {(selectedFile.size / 1024).toFixed(2)} KB
+              </p>
+            )}
             <input
               id="file-upload"
               type="file"
               accept=".pdf,.csv"
               onChange={handleFileChange}
               className="hidden"
+              disabled={isLoading}
             />
           </label>
         </div>
+
+        {error && (
+          <div className="w-full max-w-xl bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            {error}
+          </div>
+        )}
+
+        <button
+          onClick={handleUpload}
+          disabled={!selectedFile || isLoading}
+          className="w-full max-w-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              Analisando seu extrato...
+            </>
+          ) : (
+            <>
+              <ChartNoAxesCombined className="w-5 h-5" />
+              Gerar Relatório Financeiro
+            </>
+          )}
+        </button>
       </div>
       <div className="justify-center max-w-xl mx-auto text-center py-8">
         <h1 className="text-amber-800">Aviso</h1>
