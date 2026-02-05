@@ -174,7 +174,9 @@ export default function Dashboard() {
               <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                 <ChartTooltip content={<ChartTooltipContent hideLabel />} />
                 <Pie
-                  label={({ value,percent }) => `${(percent * 100).toFixed(1)}%`}
+                  label={({ value, percent }) =>
+                    `${(percent * 100).toFixed(1)}%`
+                  }
                   outerRadius="70%"
                   data={Object.entries(reportData.report)
                     .filter(([_, data]) => Number(data.total) < 0)
@@ -203,7 +205,7 @@ export default function Dashboard() {
               </PieChart>
             </ChartContainer>
 
-            <div className="mt-2 grid grid-cols-2 md:grid-cols-3 gap-1 w-full max-w-[400px]">
+            <div className="mt-2 flex flex-wrap justify-center gap-2 max-w-[300px] sm:max-w-none mx-auto">
               {Object.entries(reportData.report)
                 .filter(([_, data]) => Number(data.total) < 0)
                 .map(([category]) => (
