@@ -16,6 +16,56 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/src/components/ui/chart";
+import { Pie, PieChart, Cell } from "recharts";
+
+const chartConfig = {
+  "Casa & Contas fixas": {
+    label: "Casa & Contas fixas",
+    color: "#3b82f6",
+  },
+  Mercado: {
+    label: "Mercado",
+    color: "#10b981",
+  },
+  Alimentação: {
+    label: "Alimentação",
+    color: "#f59e0b",
+  },
+  Transporte: {
+    label: "Transporte",
+    color: "#4d0218",
+  },
+  Saúde: {
+    label: "Saúde",
+    color: "#ef4444",
+  },
+  Compras: {
+    label: "Compras",
+    color: "#ec4899",
+  },
+  "Lazer & Entretenimento": {
+    label: "Lazer & Entretenimento",
+    color: "#06b6d4",
+  },
+  Educação: {
+    label: "Educação",
+    color: "#6366f1",
+  },
+  Outros: {
+    label: "Outros",
+    color: "#64748b",
+  },
+  Financeiro: {
+    label: "Financeiro",
+    color: "#059669",
+  },
+} satisfies ChartConfig;
 
 type ReportData = {
   month: string;
@@ -42,7 +92,7 @@ const categoryConfig = {
   "Casa & Contas fixas": { icon: Home, color: "bg-blue-500" },
   Mercado: { icon: ShoppingCart, color: "bg-emerald-500" },
   Alimentação: { icon: Utensils, color: "bg-amber-500" },
-  Transporte: { icon: Car, color: "bg-purple-500" },
+  Transporte: { icon: Car, color: "bg-rose-950" },
   Saúde: { icon: Heart, color: "bg-red-500" },
   Compras: { icon: ShoppingBag, color: "bg-pink-500" },
   "Lazer & Entretenimento": { icon: Film, color: "bg-cyan-500" },
@@ -56,7 +106,6 @@ export default function Dashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    // Carregar dados do localStorage
     const storedData = localStorage.getItem("reportData");
 
     if (storedData) {
@@ -68,7 +117,6 @@ export default function Dashboard() {
         router.push("/");
       }
     } else {
-      // Se não houver dados, redirecionar para a página inicial
       router.push("/");
     }
   }, [router]);
@@ -112,6 +160,67 @@ export default function Dashboard() {
               />
             );
           })}
+        </div>
+
+        <div className="mt-10">
+          <h2 className="text-2xl font-bold text-gray-900 text-center mb-4">
+            Gráfico de porcentagem de despesas
+          </h2>
+          <div className="flex flex-col items-center">
+            <ChartContainer
+              config={chartConfig}
+              className="min-h-[270px] sm:min-h-[350px] w-full max-w-[280px] sm:max-w-[400px]"
+            >
+              <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+                <Pie
+                  label={({ value,percent }) => `${(percent * 100).toFixed(1)}%`}
+                  outerRadius="70%"
+                  data={Object.entries(reportData.report)
+                    .filter(([_, data]) => Number(data.total) < 0)
+                    .map(([category, data]) => ({
+                      name: category,
+                      value: Math.abs(Number(data.total)),
+                      fill:
+                        chartConfig[category as keyof typeof chartConfig]
+                          ?.color || "#64748b",
+                    }))}
+                  dataKey="value"
+                  nameKey="name"
+                >
+                  {Object.entries(reportData.report)
+                    .filter(([_, data]) => Number(data.total) < 0)
+                    .map(([category], index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={
+                          chartConfig[category as keyof typeof chartConfig]
+                            ?.color || "#64748b"
+                        }
+                      />
+                    ))}
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+
+            <div className="mt-2 grid grid-cols-2 md:grid-cols-3 gap-1 w-full max-w-[400px]">
+              {Object.entries(reportData.report)
+                .filter(([_, data]) => Number(data.total) < 0)
+                .map(([category]) => (
+                  <div key={category} className="flex items-center gap-1">
+                    <div
+                      className="w-4 h-4 rounded-sm shrink-0"
+                      style={{
+                        backgroundColor:
+                          chartConfig[category as keyof typeof chartConfig]
+                            ?.color || "#64748b",
+                      }}
+                    />
+                    <span className="text-sm text-gray-700">{category}</span>
+                  </div>
+                ))}
+            </div>
+          </div>
         </div>
 
         <div className="mt-8 bg-gradient-to-br from-gray-50 to-white rounded-xl shadow-lg border border-gray-200 p-6">
