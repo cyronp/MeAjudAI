@@ -157,17 +157,15 @@ export default function Home() {
               Analisando seu extrato...
             </>
           ) : (
-            <>
-              Gerar Relatório Financeiro
-            </>
+            <>Gerar Relatório Financeiro</>
           )}
         </button>
       </div>
       <div className="justify-center max-w-xl mx-auto text-center py-8">
         <h1 className="text-amber-800">Aviso</h1>
         <p className="text-muted-foreground">
-          A inteligencia artifical pode ocasionar em alguns erros, por favor
-          analise os calculos realizados por ela para ter o melhor
+          A inteligência artificial pode ocasionar alguns erros na análise.
+          Recomendamos revisar os cálculos e categorizações para melhor
           aproveitamento do sistema.
         </p>
       </div>
